@@ -1,0 +1,33 @@
+.CarDetails img {
+    height: 400px;
+    width: 700px;
+    border-radius: 10px;
+}
+
+.Car {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.Delete-Button {
+    background-color: red;
+}
+
+.Edit-Button {
+    background-color: purple;
+}
+
+.Buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Back-Link {
+    display: flex;
+}
+
+.ServiceRecords {
+    text-align: center;
+}

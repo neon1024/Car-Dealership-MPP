@@ -1,0 +1,25 @@
+
+
+.HomePage {
+    margin: 0;
+}
+
+.LogInButton {
+    margin-right: 10px;
+}
+
+.SignUpButton {
+    margin-right: 10px;
+    background-color: #747bff;
+    color: Black;
+}
+
+.SignUpButton:hover {
+    border-color: white;
+}
+
+.AuthButtons {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0;
+}

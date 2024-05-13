@@ -1,0 +1,16 @@
+.ServiceRecordsList {
+    list-style: none;
+    text-align: left;
+}
+
+.ServiceRecordsList li {
+    margin-bottom: 25px;
+    border-bottom: 1px solid grey;
+}
+
+.Buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
