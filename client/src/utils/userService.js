@@ -9,21 +9,21 @@ const userService = {
             return response.data;
         } catch (error) {
             throw error;
-        }       
+        }
     },
     loginUser: async (userData) => {
         try {
             const response = await axios.post(`${BASE_URL}/login`, userData, {withCredentials: true});
             return response.data;
-          } catch (error) {
+        } catch (error) {
             throw error;
-          }
+        }
     },
     logoutUser: async () => {
         try {
             const response = await axios.get(`${BASE_URL}/logout`, {withCredentials: true});
             return response.data;
-          } catch (error) {
+        } catch (error) {
             throw error;
         }
     },
@@ -31,7 +31,7 @@ const userService = {
         try {
             const response = await axios.get(`${BASE_URL}/users/${id}`, {withCredentials: true});
             return response.data;
-          } catch (error) {
+        } catch (error) {
             throw error;
         }
     },

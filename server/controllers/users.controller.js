@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 // mail verification
 const nodemailer = require('nodemailer');
@@ -24,16 +25,16 @@ const createToken = (id) => {
     });
 }
 
-
-module.exports.register =  async (req, res) => {
+module.exports.register = async (req, res) => {
+    console.log(req.body);
     try {
         const user = new User(req.body);
+        const token = createToken(user._id.toString());
         await user.save();
-        const token = createToken(user._id);
-        // res.cookie('jwt', token, {
-        //     httpOnly: true,
-        //     maxAge: maxAge * 1000
-        // });
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            maxAge: maxAge * 1000
+        });
 
         //async email
         jwt.sign(
@@ -42,7 +43,7 @@ module.exports.register =  async (req, res) => {
             {expiresIn: '1d'},
             (err, emailToken) => {
                 if (err) {
-                    conseole.error("Error getting emailToken", error);
+                    console.error("Error getting emailToken", error);
                 }
                 const url = `http://localhost:5173/confirmation/${emailToken}`;
 
@@ -58,7 +59,7 @@ module.exports.register =  async (req, res) => {
                         console.log("Email sent:", info.response);
                         res.status(201).json(emailToken);
                     }
-                });                
+                });
             },
         );
     } catch (err) {
@@ -68,43 +69,45 @@ module.exports.register =  async (req, res) => {
 
 module.exports.login = async (req, res) => {
     try {
-        const { email, password, authCode } = req.body;
+        const {email, password} = req.body;
         const user = await User.login(email, password);
         if (!user.confirmed) {
             res.status(403).send("Please confirm your email to login");
-        } else {
-            if (authCode === "") {
-                code = generateRandomCode();
-                authCodes[user._id] = code;
-
-                transporter.sendMail({
-                    from: 'm43941931@gmail.com',
-                    to: user.email,
-                    subject: "2FA Auth",
-                    html: `2FA Authenticator Code: <h1>${code}</h1>`,
-                }, (err, info) => {
-                    if (err) {
-                        console.error("Error sending 2FA email:", err);
-                    } else {
-                        console.log("Email 2FA sent:", info.response);
-                    }
-                });
-                res.status(200).send("Auth code sent to email");  
-            } else {
-                if (authCode === authCodes[user._id]) {
-                    const token = createToken(user._id);
-                    res.cookie('jwt', token, {
-                    httpOnly: true,
-                    maxAge: maxAge * 1000
-                    });
-                    delete authCodes[user._id];
-                    res.status(200).json(user);
-                } else {
-                    console.log(authCodes[user._id]);
-                    res.status(403).send("Wrong auth code");
-                }
-            }
-        }  
+        }
+        // else {
+        //     if (authCode === "") {
+        //         code = generateRandomCode();
+        //         authCodes[user._id] = code;
+        //
+        //         transporter.sendMail({
+        //             from: 'm43941931@gmail.com',
+        //             to: user.email,
+        //             subject: "2FA Auth",
+        //             html: `2FA Authenticator Code: <h1>${code}</h1>`,
+        //         }, (err, info) => {
+        //             if (err) {
+        //                 console.error("Error sending 2FA email:", err);
+        //             } else {
+        //                 console.log("Email 2FA sent:", info.response);
+        //             }
+        //         });
+        //         res.status(200).send("Auth code sent to email");
+        //     } else {
+        //         if (authCode === authCodes[user._id]) {
+        //             const token = createToken(user._id);
+        //             res.cookie('jwt', token, {
+        //                 httpOnly: true,
+        //                 maxAge: maxAge * 1000
+        //             });
+        //             delete authCodes[user._id];
+        //             res.status(200).json(user);
+        //         } else {
+        //             console.log(authCodes[user._id]);
+        //             res.status(403).send("Wrong auth code");
+        //         }
+        //     }
+        // }
+        res.status(200).send(JSON.stringify(user));
     } catch (err) {
         res.status(400).send("Error logging user in");
     }
@@ -121,5 +124,5 @@ module.exports.getUser = async (req, res) => {
         res.status(200).json(user);
     } catch (err) {
         res.status(404).send("User not found");
-    }  
+    }
 }

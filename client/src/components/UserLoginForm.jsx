@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import "../css/CarAddForm.css";
 
 export default function UserLoginForm({loginUser}) {
@@ -18,7 +18,7 @@ export default function UserLoginForm({loginUser}) {
         setFormData(currentData => {
             return {
                 ...currentData,
-                [changedField]:newValue
+                [changedField]: newValue
             }
         });
     }
@@ -27,30 +27,32 @@ export default function UserLoginForm({loginUser}) {
         try {
             e.preventDefault();
             const response = await loginUser(formData);
-            if (authCodeSent) {
-                navigateTo("/");
-            }
+            // if (authCodeSent) {
+            //     navigateTo("/");
+            // }
+            // if (response) {
+            //     setAuthCodeSent(true);
+            // }
             if (response) {
-                setAuthCodeSent(true);
+                navigateTo("/");
             }
         } catch (error) {
             console.log(error.message);
         }
-        
     }
 
     return (
         <>
-        <form className="CarAddForm" onSubmit={handleSubmit}>
-            {!authCodeSent ? <div><label htmlFor="email">Email</label>
-            <input type="email" placeholder="email" value={formData.username} onChange={handleChange} name="email" required/>
-            <label htmlFor="password">Password</label>
-            <input type="password" placeholder="password" value={formData.password} onChange={handleChange} name="password" required/>
-            </div> : <div><label htmlFor="authCode">Auth Code</label><input type="text" placeholder="auth code" value={formData.authCode} onChange={handleChange} name="authCode"/></div>
-            }
-            <button type="submit">Submit</button>
-        </form>
-        <a href="/">Go Back</a>
-        </> 
+            <form className="CarAddForm" onSubmit={handleSubmit}>
+                {!authCodeSent ? <div><label htmlFor="email">Email</label>
+                    <input type="email" placeholder="email" value={formData.username} onChange={handleChange} name="email" required/>
+                    <label htmlFor="password">Password</label>
+                    <input type="password" placeholder="password" value={formData.password} onChange={handleChange} name="password" required/>
+                </div> : <div><label htmlFor="authCode">Auth Code</label><input type="text" placeholder="auth code" value={formData.authCode} onChange={handleChange} name="authCode"/></div>
+                }
+                <button type="submit">Submit</button>
+            </form>
+            <a href="/">Go Back</a>
+        </>
     );
 }
